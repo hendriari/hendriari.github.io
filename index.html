@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nirankara Studio – Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #7c6af7;
+      --accent2: #f76a8c;
+      --text: #e8e8f0;
+      --muted: #666680;
+      --tag-bg: #1a1a2e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(124,106,247,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,106,247,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: rgba(124,106,247,0.12);
+      top: -150px; right: -100px;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(247,106,140,0.07);
+      bottom: 0; left: -100px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    header h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-desc {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.35s forwards;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 52px 0 28px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.5s forwards;
+    }
+
+    .section-title span {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── PROJECT CARD ── */
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.6s forwards;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      border-color: rgba(124,106,247,0.4);
+      box-shadow: 0 0 40px rgba(124,106,247,0.08);
+    }
+
+    .card-header {
+      padding: 32px 36px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(124,106,247,0.3);
+    }
+
+    .card-meta {
+      flex: 1;
+    }
+
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .card-by {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card-by strong {
+      color: var(--accent);
+    }
+
+    .card-badge {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(124,106,247,0.12);
+      border: 1px solid rgba(124,106,247,0.25);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .card-desc {
+      padding: 24px 36px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 20px 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: var(--tag-bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── PAGES LIST ── */
+    .pages-label {
+      padding: 20px 36px 12px;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pages-list {
+      list-style: none;
+    }
+
+    .pages-list li {
+      border-top: 1px solid var(--border);
+    }
+
+    .pages-list li:first-child {
+      border-top: none;
+    }
+
+    .pages-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      transition: background 0.2s ease, color 0.2s ease;
+      gap: 16px;
+    }
+
+    .pages-list a:hover {
+      background: rgba(124,106,247,0.05);
+      color: var(--accent);
+    }
+
+    .page-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+    }
+
+    .pages-list a:hover .page-icon {
+      background: rgba(124,106,247,0.15);
+      border-color: rgba(124,106,247,0.3);
+    }
+
+    .page-text {}
+
+    .page-title {
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      margin-bottom: 2px;
+    }
+
+    .page-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 18px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .pages-list a:hover .arrow {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      margin-top: 64px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .card-header { padding: 24px 20px 20px; flex-direction: column; }
+      .card-desc, .tags, .pages-label { padding-left: 20px; padding-right: 20px; }
+      .pages-list a { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="container">
+  <header>
+    <p class="header-label">Nirankara Studio</p>
+    <h1>Projects &amp;<br/><span>Legal Pages</span></h1>
+    <p class="header-desc">A collection of published apps and their documentation — terms, privacy policies, and data management pages.</p>
+  </header>
+
+  <div class="section-title">
+    <span>01 / Projects</span>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div style="display:flex;align-items:center;gap:16px;flex:1">
+        <div class="card-icon">📸</div>
+        <div class="card-meta">
+          <div class="card-name">AI SnapExplain</div>
+          <div class="card-by">by <strong>Nirankara Studio</strong></div>
+        </div>
+      </div>
+      <div class="card-badge">Live</div>
+    </div>
+
+    <div class="card-desc">
+      AI-powered mobile app that provides instant explanations for images and text. Snap anything, get it explained — powered by OpenAI with Google OAuth, quota management, and optional premium subscription via Google Play.
+    </div>
+
+    <div class="tags">
+      <span class="tag">Flutter</span>
+      <span class="tag">OpenAI</span>
+      <span class="tag">Supabase</span>
+      <span class="tag">Firebase</span>
+      <span class="tag">RevenueCat</span>
+      <span class="tag">Google AdMob</span>
+      <span class="tag">Android</span>
+    </div>
+
+    <p class="pages-label">Legal & Support Pages</p>
+
+    <ul class="pages-list">
+      <li>
+        <a href="aisnapexplain/terms-of-service.html">
+          <div class="page-info">
+            <div class="page-icon">📄</div>
+            <div class="page-text">
+              <div class="page-title">Terms of Service</div>
+              <div class="page-sub">Usage rules, subscriptions, acceptable use</div>
+            </div>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="aisnapexplain/privacy-policy.html">
+          <div class="page-info">
+            <div class="page-icon">🔒</div>
+            <div class="page-text">
+              <div class="page-title">Privacy Policy</div>
+              <div class="page-sub">Data collection, storage, and third-party services</div>
+            </div>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="aisnapexplain/delete-account.html">
+          <div class="page-info">
+            <div class="page-icon">🗑️</div>
+            <div class="page-text">
+              <div class="page-title">Delete Account &amp; Data</div>
+              <div class="page-sub">Request account or data deletion</div>
+            </div>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>© 2026 Nirankara Studio · <a href="mailto:support@aisnapexplain.online">support@aisnapexplain.online</a></p>
+    <p style="margin-top:6px">Built with care · Hosted on GitHub Pages</p>
+  </footer>
+</div>
+
+</body>
+</html>
